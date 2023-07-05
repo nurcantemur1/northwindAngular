@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Category } from 'src/app/models/category';
+import { HttpClient } from '@angular/common/http';
+import { CategoryResponseModel } from 'src/app/models/categoryResponseModel';
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent {
-  category={categoryId:1,categoryName:"gg"};
+export class CategoryComponent implements OnInit{
 
-  categories=[this.category,this.category,this.category];
+  categories:Category[]=[];
+  apiUrl="https://localhost:44383/api/Categories/getall";
+  constructor(private httpClient:HttpClient){
+
+  }
+ ngOnInit(): void {
+   this.getCategory();
+ }
+  getCategory(){
+    this.httpClient.get<CategoryResponseModel>(this.apiUrl).subscribe(responce=>{
+      this.categories=responce.data;
+    });
+  }
 }
